@@ -1031,12 +1031,12 @@ def store(
             return result
 
 
-def blockdims_from_blockshape(shape, chunks):
+def chunks_from_blockshape(shape, chunks):
     """
 
-    >>> blockdims_from_blockshape((10, 10), (4, 3))
+    >>> chunks_from_blockshape((10, 10), (4, 3))
     ((4, 4, 2), (3, 3, 3, 1))
-    >>> blockdims_from_blockshape((10, 0), (4, 0))
+    >>> chunks_from_blockshape((10, 0), (4, 0))
     ((4, 4, 2), (0,))
     """
     if chunks is None:
@@ -2776,7 +2776,7 @@ def normalize_chunks(chunks, shape=None, limit=None, dtype=None, previous_chunks
     if chunks and shape is not None:
         chunks = sum(
             (
-                blockdims_from_blockshape((s,), (c,))
+                chunks_from_blockshape((s,), (c,))
                 if not isinstance(c, (tuple, list))
                 else (c,)
                 for s, c in zip(shape, chunks)

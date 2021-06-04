@@ -22,10 +22,10 @@ import dask.array as da
 import dask.dataframe
 from dask.array.core import (
     Array,
-    blockdims_from_blockshape,
     broadcast_chunks,
     broadcast_shapes,
     broadcast_to,
+    chunks_from_blockshape,
     common_blockdim,
     concatenate,
     concatenate3,
@@ -1609,11 +1609,11 @@ def test_dtype():
     assert d.sum().dtype == d.sum().compute().dtype  # no shape
 
 
-def test_blockdims_from_blockshape():
-    assert blockdims_from_blockshape((10, 10), (4, 3)) == ((4, 4, 2), (3, 3, 3, 1))
-    pytest.raises(TypeError, lambda: blockdims_from_blockshape((10,), None))
-    assert blockdims_from_blockshape((1e2, 3), [1e1, 3]) == ((10,) * 10, (3,))
-    assert blockdims_from_blockshape((np.int8(10),), (5,)) == ((5, 5),)
+def test_chunks_from_blockshape():
+    assert chunks_from_blockshape((10, 10), (4, 3)) == ((4, 4, 2), (3, 3, 3, 1))
+    pytest.raises(TypeError, lambda: chunks_from_blockshape((10,), None))
+    assert chunks_from_blockshape((1e2, 3), [1e1, 3]) == ((10,) * 10, (3,))
+    assert chunks_from_blockshape((np.int8(10),), (5,)) == ((5, 5),)
 
 
 def test_coerce():
