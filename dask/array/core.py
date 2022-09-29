@@ -2913,6 +2913,19 @@ class Array(DaskMethodsMixin):
         """
         return to_zarr(self, *args, **kwargs)
 
+    def to_n5(self, *args, **kwargs):
+        """Save array to the N5 storage format
+
+        See https://github.com/saalfeldlab/n5 for details about the format.
+
+        Refer to :func:`dask.array.to_n5` for full documentation.
+
+        See also
+        --------
+        dask.array.to_n5 : equivalent function
+        """
+        return to_n5(self, *args, **kwargs)
+
     def to_tiledb(self, uri, *args, **kwargs):
         """Save array to the TileDB storage manager
 
@@ -3685,6 +3698,25 @@ def to_zarr(
         **kwargs,
     )
     return arr.store(z, lock=False, compute=compute, return_stored=return_stored)
+
+
+def to_n5(
+    arr,
+    url,
+    component=None,
+    storage_options=None,
+    overwrite=False,
+    region=None,
+    compute=True,
+    return_stored=False,
+    **kwargs,
+):
+    import zarr  # https://zarr.readthedocs.io/en/stable/api/n5.html
+
+    store = zarr.N5Store(url)
+    z = zarr.zeros(arr.shape, chunks=arr.chunks, store=store, overwrite=overwrite)
+    z[:] = arr
+    return z
 
 
 def _check_regular_chunks(chunkset):
